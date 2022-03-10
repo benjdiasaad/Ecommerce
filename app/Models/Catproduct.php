@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Catproduct extends Model
 {
     use HasFactory;
+    protected $table = 'catproducts';
+    
+    protected $guarded = ['id'];
+
+    public function produits()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

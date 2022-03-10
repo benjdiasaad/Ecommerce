@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +16,30 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('template.home');
+});
+
+Route::get('/about', function () {
+    return view('template.about');
+});
+
+// Products Route 
+Route::controller(ProductController::class)->group(function(){
+    Route::get('menu', 'index')->name('template.menu');
+    Route::get('/menu/{nom}', 'show')->name('template.show');
+});
+
+// Cart route
+Route::controller(CartController::class)->group(function(){
+   Route::post('/panier/ajouter', 'store')->name('cart.store');
+   Route::get('panier', 'index')->name('cart.index');
+   Route::delete('/panier/{rowId}', 'destroy')->name('cart.destroy');
+});
+
+Route::get('/special', function () {
+    return view('template.specials');
+});
+
+Route::get('/contact', function () {
+    return view('template.contact');
 });
