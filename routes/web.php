@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductController;
+ 
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +44,14 @@ Route::get('/special', function () {
 
 Route::get('/contact', function () {
     return view('template.contact');
+});
+
+
+
+Route::prefix('admin')->controller(AdminController::class)->group(function(){
+    Route::get('/login', 'login')->name('admin.login');
+    Route::get('/register', 'register')->name('admin.register');
+    Route::get('/dashboard', 'index')->name('admin.dashboard');
+    Route::get('/category', 'category')->name('admin.category');    
+    Route::get('/product', 'product')->name('admin.product');    
 });
