@@ -20,7 +20,7 @@
           <li><a class="nav-link scrollto" href="/menu">Menu</a></li>
           <li><a class="nav-link scrollto" href="/special">Specials</a></li>
           <li><a class="nav-link scrollto" href="/contact">Contact</a></li>
-          <li><a class="nav-link scrollto" href="{{ route('cart.index') }}"><i class="fa fa-shopping-cart" aria-hidden="true"> <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> {{ Cart::count() }} </span> </i> </a></li>
+          <li><a class="nav-link scrollto" href="{{ route('cart.index') }}">panier <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> {{ Cart::count() }} </span> </a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>

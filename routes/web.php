@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ProductController;
  
 
@@ -47,10 +48,15 @@ Route::get('/contact', function () {
 });
 
 
+Route::get('/logout', [LogoutController::class, 'perform'])->name('logout.perform');
+
 
 Route::prefix('admin')->controller(AdminController::class)->group(function(){
+    Route::get('/', 'checkAuth');
     Route::get('/login', 'login')->name('admin.login');
+    Route::post('custom-login','customLogin')->name('login.custom');
     Route::get('/register', 'register')->name('admin.register');
+    Route::post('custom-registration', 'customRegistration')->name('register.custom');
     Route::get('/dashboard', 'index')->name('admin.dashboard');
     Route::get('/category', 'category')->name('admin.category');    
     Route::get('/product', 'product')->name('admin.product');    
