@@ -58,6 +58,11 @@ Route::prefix('admin')->controller(AdminController::class)->group(function(){
     Route::get('/register', 'register')->name('admin.register');
     Route::post('custom-registration', 'customRegistration')->name('register.custom');
     Route::get('/dashboard', 'index')->name('admin.dashboard');
-    Route::get('/category', 'category')->name('admin.category');    
+    Route::get('/category', 'category')->name('admin.category');
+    Route::post('/categories', 'store'); 
+    Route::get('/edit-category/{id}', 'edit');
+    Route::put('/update-category/{id}','update');
+    Route::get('/fetch-categories','fetchCategory');
+    route::delete('/delete-category/{id}', 'destroy');
     Route::get('/product', 'product')->name('admin.product');    
 });

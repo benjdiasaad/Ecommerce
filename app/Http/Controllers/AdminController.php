@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Catproduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -74,6 +76,111 @@ class AdminController extends Controller
             return redirect("/admin/dashboard");
         }else{
             return redirect("/admin/register");
+        }
+    }
+
+    public function store(Request $request){
+        $validator = Validator::make($request->all(), [
+            'category' => "required",
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' =>400,
+                'errors' =>$validator->messages(),
+            ]);
+        }else{
+            $category = new Catproduct();
+            $category->category = $request->input('category');
+            $category->save();
+            return response()->json([
+                'status' =>200,
+                'message' =>'Category added successfully',
+            ]);
+        }
+    }
+
+    public function fetchCategory(){
+        $category = Catproduct::all();
+        return response()->json([
+            'category'=>$category,
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $category = Catproduct::find($id);
+        if($category)
+        {
+            return response()->json([
+                'status'=>200,
+                'category'=> $category,
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=>404,
+                'message'=>'No category Found.'
+            ]);
+        }
+
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'category'=> 'required',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'status'=>400,
+                'errors'=>$validator->messages()
+            ]);
+        }
+        else
+        {
+            $category = Catproduct::find($id);
+            if($category)
+            {
+                $category->category = $request->input('category');
+                $category->update();
+                return response()->json([
+                    'status'=>200,
+                    'message'=>'Category Updated Successfully.'
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'No Category Found.'
+                ]);
+            }
+
+        }
+    }
+
+
+    public function destroy($id)
+    {
+        $category = Catproduct::find($id);
+        if($category)
+        {
+            $category->delete();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Category Deleted Successfully.'
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=>404,
+                'message'=>'No category Found.'
+            ]);
         }
     }
 }
