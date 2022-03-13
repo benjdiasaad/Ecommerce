@@ -1,10 +1,13 @@
 <?php
 
 namespace App\App;
-use App\Services\ProductService;
+use Throwable;
 use App\Models\Product;
+use App\Services\ProductService;
+use Illuminate\Support\Facades\Log;
 
 class ProductApp {
+    
     protected $productService;
     public function __construct(ProductService $productService)
     {

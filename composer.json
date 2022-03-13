@@ -11,7 +11,8 @@
         "hardevine/shoppingcart": "^3.1",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
-        "laravel/tinker": "^2.5"
+        "laravel/tinker": "^2.5",
+        "stripe/stripe-php": "^7.116"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CheckoutController;
  
 
 /*
@@ -20,7 +21,7 @@ use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('template.home');
-});
+})->name('template.home');
 
 Route::get('/about', function () {
     return view('template.about');
@@ -66,3 +67,9 @@ Route::prefix('admin')->controller(AdminController::class)->group(function(){
     route::delete('/delete-category/{id}', 'destroy');
     Route::get('/product', 'product')->name('admin.product');    
 });
+
+
+// Checkout Routes 
+Route::get('/paiement', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/paiement', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/merci', [CheckoutController::class, 'thankYou'])->name('checkout.thankYou');

@@ -67,7 +67,7 @@
                                     <div class="p-2">
                                         <img src="{{ $product->model->image }}" alt="" width="70" class="img-fluid rounded shadow-sm">
                                         <div class="ml-3 d-inline-block align-middle">
-                                            <h5 class="mb-0"> <a href="{{ route('template.show', ['nom' => $product->model->nom]) }}" class="text-dark d-inline-block align-middle">{{ $product->model->details }}</a></h5><span class="text-muted font-weight-normal font-italic d-block">Category:</span>
+                                            <h5 class="mb-0"> <a href="{{ route('template.show', ['nom' => $product->model->nom]) }}" class="text-dark d-inline-block align-middle">{{ $product->model->nom }}</a></h5><span class="text-muted font-weight-normal font-italic d-block">{{ $product->model->details }}</span>
                                         </div>
                                     </div>
                                 </th>
@@ -117,7 +117,7 @@
                         <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total</strong>
                             <h5 class="font-weight-bold" style="color:black;">{{getPrix(Cart::total())}}</h5>
                         </li>
-                        </ul><a href="#" class="btn btn-dark rounded-pill py-2 btn-block">Procceed to checkout</a>
+                        </ul><a href="{{ route('checkout.index') }}" class="btn btn-dark rounded-pill py-2 btn-block">Passer à la caisse</a>
                     </div>
                     </div>
             </div>

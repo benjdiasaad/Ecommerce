@@ -9,6 +9,8 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
+  @yield('extra-meta')
+  @yield('extra-script')
   <!-- Favicons -->
   <link href="{{ asset('assets/img/Saad.ico') }}" rel="icon">
   <link href="{{ asset('assets/img/Saad.jpg') }}" rel="Saad.jpg">
@@ -48,6 +50,7 @@
 
   @include('partials.footer')
 
+  @yield('extra-js')
   <div id="preloader"></div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
