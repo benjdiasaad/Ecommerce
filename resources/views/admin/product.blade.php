@@ -66,37 +66,45 @@
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-							<ul id="saveform_errList"> </ul>
 
-							<div class="form-group mb-3">
-								<label for="">Product Name</label>
-								<input type="text" required class="nom form-control">
-							</div>
-							<div class="form-group mb-3">
-								<label for="">Details of product</label>
-								<textarea class="details form-control" rows="3" required></textarea>
-							</div>
-							<div class="form-group mb-3">
-								<label for="">Prix of product</label>
-								<input type="number" required class="prix form-control">
-							</div>
-							<div class="form-group mb-3">
-								<label for="">Choose category</label>
-								<select class="category form-control">
-									@foreach($categories as $categorie)
-									<option value="{{ $categorie->id }}">{{$categorie->category}}</option>
-									@endforeach
-								</select>
-							</div>
-							<div class="form-group mb-3">
-								<label for="">Sélectionner une image :</label>
-								<input type="file" accept="image/*" multiple class="image form-control">
-							</div>
+							<form action="{{route('admin.store')}}" method="post" enctype="multipart/form-data" id="form">
+								@csrf
+								  <div class="form-group mb-3">
+									  <label for="">Product name</label>
+									  <input type="text" name="nom" class="form-control">
+									  <span class="text-danger error-text nom_error"></span>
+								  </div>
+								  <div class="form-group mb-3">
+									<label for="">Prix</label>
+									<input type="number" name="prix" class="form-control">
+									<span class="text-danger error-text prix_error"></span>
+								  </div>
+								  <div class="form-group mb-3">
+									<label for="">Details</label>
+									<textarea name="details" class="details form-control" rows="3" required></textarea>
+									<span class="text-danger error-text detail_error"></span>
+								 </div>
+								 <div class="form-group mb-3">
+									<label for="">Choose category</label>
+									<select class="form-control" name="category_id">
+										@foreach($categories as $categorie)
+										<option value="{{ $categorie->id }}">{{$categorie->category}}</option>
+										@endforeach
+									</select>
+									<span class="text-danger error-text category_id_error"></span>
+								</div>
+								  <div class="form-group mb-3">
+									  <label for="">Product image</label>
+									  <input type="file" name="image" class="form-control">
+									  <span class="text-danger error-text image_error"></span>
+								  </div>
+								  <div class="img-holder"></div>
+								  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								  <button type="submit" class="btn btn-primary">Save Product</button>
+							  </form>
+							
 						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary add_product">Save changes</button>
-						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -148,6 +156,8 @@
 											<th>#</th>
 											<th>Nom de produit</th>
 											<th>Prix</th>
+											<th>Catgorie</th>
+											<th>Image</th>
 											<th>Edit</th>
 											<th>Delete</th>
 										</tr>
@@ -193,6 +203,8 @@
                             <td>' + item.id + '</td>\
                             <td>' + item.nom + '</td>\
                             <td>' + item.prix + '</td>\
+                            <td>' + item.category + '</td>\
+                            <td> <img class="d-flex align-self-start rounded mr-3" height="64" src=/storage/files/'+ item.image + '> </img></td>\
                             <td><button type="button" value="' + item.id + '" class="btn btn-primary editbtn btn-sm">Edit</button></td>\
                             <td><button type="button" value="' + item.id + '" class="btn btn-danger deletebtn btn-sm">Delete</button></td>\
                         \</tr>');
@@ -200,15 +212,9 @@
                 }
             });
            }
-			$(document).on('click', '.add_product', function(e) {
-				e.preventDefault();
-				var data = {
-					'nom' : $('.nom').val(),
-					'prix' : $('.prix').val(),
-					'details': $('.details').val(),
-					'category_id' : $('.category').val(),
-					'image' : $('.image').val(),
-				}
+			
+		   $('#form').on('submit', function(e){
+                e.preventDefault();
 
 				$.ajaxSetup({
 					headers: {
@@ -216,32 +222,58 @@
 					}
 				});
 
-				$.ajax({
-					type: 'POST',
-					url:"/admin/products",
-					data: data,
-					dataType: 'json',
-					success: function(response) {
-						if(response.status == 400)
-						{
-							$('#saveform_errList').html("");
-                            $('#saveform_errList').addClass('alert alert-danger');
-							$.each(response.errors, function(key, err_value){
-								$('#saveform_errList').append('<li>' + err_value + '</li>');
-							});
-						}
-						else
-						{
-							$('#success_message').html("");
-							$('#success_message').addClass('alert alert-success');
-							$('#success_message').text(response.message);
-							$('#addProduct').modal('hide');
-							$('#addProduct').find('input').val("");
-							fetchProduct();
-						}
-					}
-				})
-			});
+                var form = this;
+                $.ajax({
+                    url:$(form).attr('action'),
+                    method:$(form).attr('method'),
+                    data:new FormData(form),
+                    processData:false,
+                    dataType:'json',
+                    contentType:false,
+                    beforeSend:function(){
+                        $(form).find('span.error-text').text('');
+                    },
+                    success:function(data){
+                        if(data.code == 0){
+                            $.each(data.error, function(prefix,val){
+                                $(form).find('span.'+prefix+'_error').text(val[0]);
+                            });
+                        }else{
+                            $(form)[0].reset();
+                            // alert(data.msg);
+							$("#success_message").html("");
+							$("#success_message").addClass('alert alert-success');
+							$("#success_message").text(data.msg);
+							$("#addProduct").modal('hide');
+                            fetchProduct();
+                        }
+                    }
+                });
+            });
+
+			//Reset input file
+            $('input[type="file"][name="image"]').val('');
+            //Image preview
+            $('input[type="file"][name="image"]').on('change', function(){
+                var img_path = $(this)[0].value;
+                var img_holder = $('.img-holder');
+                var extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+                if(extension == 'jpeg' || extension == 'jpg' || extension == 'png'){
+                     if(typeof(FileReader) != 'undefined'){
+                          img_holder.empty();
+                          var reader = new FileReader();
+                          reader.onload = function(e){
+                              $('<img/>',{'src':e.target.result,'class':'img-fluid','style':'max-width:100px;margin-bottom:10px;'}).appendTo(img_holder);
+                          }
+                          img_holder.show();
+                          reader.readAsDataURL($(this)[0].files[0]);
+                     }else{
+                         $(img_holder).html('This browser does not support FileReader');
+                     }
+                }else{
+                    $(img_holder).empty();
+                }
+            });
 
 			$(document).on('click', '.deletebtn', function () {
 				var categorie_id = $(this).val();
@@ -284,7 +316,7 @@
             });
         });
 
-		});
+	});
 	</script>
 
 

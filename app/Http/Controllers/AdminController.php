@@ -20,11 +20,6 @@ class AdminController extends Controller
        return view('admin.category');
     }
 
-    public function product(){
-        $categories = Catproduct::all();
-        return view('admin.product', ['categories' => $categories]);
-    }
-
     public function login(){
         return view('admin.login');
     }
@@ -109,8 +104,18 @@ class AdminController extends Controller
         ]);
     }
 
+    public function product(){
+        $categories = Catproduct::all();
+
+        return view('admin.product', ['categories' => $categories]);
+    }
+
     public function fetchProduct(){
-        $product = Product::all();
+        $product = Product::join('catproducts', 'products.category_id', '=', 'catproducts.id')
+                ->select('nom','details','prix','image','category','products.id')
+                ->orderBy('products.id')
+                ->get();
+        // $product = Product::join();
         return response()->json([
             'product'=>$product,
         ]);
@@ -213,31 +218,34 @@ class AdminController extends Controller
     }
 
     public function storeProduct(Request $request){
-        $validator = Validator::make($request->all(), [
-            'nom' => "required",
-            'prix' => "required",
-            'details' => "required",
-            'image' => "required",
-            'category_id' => "required",
-        ]);
+        $validator = \Validator::make($request->all(),[
+            'nom'=>'required|string|unique:products',
+            'details'=>'required',
+            'image' =>'required',
+            'category_id' =>'required',
+            'prix' =>'required',
+         ]);
 
-        if($validator->fails()){
-            return response()->json([
-                'status' =>400,
-                'errors' =>$validator->messages(),
-            ]);
-        }else{
-            $product = new Product();
-            $product->nom = $request->input('nom');
-            $product->details = $request->input('details');
-            $product->prix = $request->input('prix');
-            $product->category_id = $request->input('category_id');
-            $product->image = $request->input('image');
-            $product->save();
-            return response()->json([
-                'status' =>200,
-                'message' =>'Product added successfully',
-            ]);
-        }
+         if(!$validator->passes()){
+             return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+         }else{
+             $path = 'files/';
+             $file = $request->file('image');
+             $file_name = time().'_'.$file->getClientOriginalName();
+
+          //    $upload = $file->storeAs($path, $file_name);
+          $upload = $file->storeAs($path, $file_name, 'public');
+
+             if($upload){
+                 Product::insert([
+                     'nom'=>$request->nom,
+                     'image'=>$file_name,
+                     'details'=> $request->details,
+                     'prix' => $request->prix,
+                     'category_id' => $request->category_id,   
+                 ]);
+                 return response()->json(['code'=>1,'msg'=>'New product has been saved successfully']);
+             }
+         }
     }
 }

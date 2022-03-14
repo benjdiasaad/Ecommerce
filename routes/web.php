@@ -66,7 +66,7 @@ Route::prefix('admin')->controller(AdminController::class)->group(function(){
     Route::get('/fetch-categories','fetchCategory');
     route::delete('/delete-category/{id}', 'destroy');
     Route::get('/product', 'product')->name('admin.product');  
-    Route::post('/products', 'storeProduct');  
+    Route::post('/products', 'storeProduct')->name('admin.store');  
     Route::get('/fetch-products', 'fetchProduct');
     route::delete('/delete-product/{id}', 'destroyProduct');
 });
