@@ -65,11 +65,9 @@ Route::prefix('admin')->controller(AdminController::class)->group(function(){
     Route::put('/update-category/{id}','update');
     Route::get('/fetch-categories','fetchCategory');
     route::delete('/delete-category/{id}', 'destroy');
-    Route::get('/product', 'product')->name('admin.product');    
+    Route::get('/product', 'product')->name('admin.product');  
+    Route::post('/products', 'storeProduct');  
+    Route::get('/fetch-products', 'fetchProduct');
+    route::delete('/delete-product/{id}', 'destroyProduct');
 });
 
-
-// Checkout Routes 
-Route::get('/paiement', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/paiement', [CheckoutController::class, 'store'])->name('checkout.store');
-Route::get('/merci', [CheckoutController::class, 'thankYou'])->name('checkout.thankYou');

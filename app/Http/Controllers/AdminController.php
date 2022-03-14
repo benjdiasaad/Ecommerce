@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Product;
 use App\Models\Catproduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,8 @@ class AdminController extends Controller
     }
 
     public function product(){
-        return view('admin.product');
+        $categories = Catproduct::all();
+        return view('admin.product', ['categories' => $categories]);
     }
 
     public function login(){
@@ -107,6 +109,13 @@ class AdminController extends Controller
         ]);
     }
 
+    public function fetchProduct(){
+        $product = Product::all();
+        return response()->json([
+            'product'=>$product,
+        ]);
+    }
+
     public function edit($id)
     {
         $category = Catproduct::find($id);
@@ -180,6 +189,54 @@ class AdminController extends Controller
             return response()->json([
                 'status'=>404,
                 'message'=>'No category Found.'
+            ]);
+        }
+    }
+
+    public function destroyProduct($id){
+        $product = Product::find($id);
+        if($product)
+        {
+            $product->delete();
+            return response()->json([
+                'status'=>200,
+                'message'=>'Product Deleted Successfully.'
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=>404,
+                'message'=>'No product Found.'
+            ]);
+        }
+    }
+
+    public function storeProduct(Request $request){
+        $validator = Validator::make($request->all(), [
+            'nom' => "required",
+            'prix' => "required",
+            'details' => "required",
+            'image' => "required",
+            'category_id' => "required",
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' =>400,
+                'errors' =>$validator->messages(),
+            ]);
+        }else{
+            $product = new Product();
+            $product->nom = $request->input('nom');
+            $product->details = $request->input('details');
+            $product->prix = $request->input('prix');
+            $product->category_id = $request->input('category_id');
+            $product->image = $request->input('image');
+            $product->save();
+            return response()->json([
+                'status' =>200,
+                'message' =>'Product added successfully',
             ]);
         }
     }

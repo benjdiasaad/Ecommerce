@@ -117,7 +117,7 @@
                         <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total</strong>
                             <h5 class="font-weight-bold" style="color:black;">{{getPrix(Cart::total())}}</h5>
                         </li>
-                        </ul><a href="{{ route('checkout.index') }}" class="btn btn-dark rounded-pill py-2 btn-block">Passer à la caisse</a>
+                        </ul><a href="#" class="btn btn-dark rounded-pill py-2 btn-block">Passer à la caisse</a>
                     </div>
                     </div>
             </div>
@@ -125,7 +125,7 @@
     </div>
 </div>
 @else
-    <div class="col-md-12">
+    <div class="col-md-12" style="margin-top: 11%;text-align:center;background-color:white;color:black;">
         <p>Votre panier est vide.</p>
     </div>
 @endif
