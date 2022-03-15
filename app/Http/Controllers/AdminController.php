@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Contact;
 use App\Models\Product;
 use App\Models\Catproduct;
 use Illuminate\Http\Request;
@@ -12,18 +13,31 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+    /* Pass number of (users, products, categories) in dashboard*/
     public function index() {
-        return view('admin.dashboard');
+        $product = Product::count();
+        $category = Catproduct::count();
+        $user = User::count();
+        return view('admin.dashboard',['product' => $product, 'category'=>$category,'user'=>$user]);
     }
 
+    public function message(){
+        $messages = Contact::all();
+        return view('admin.message',['messages' => $messages]);
+    }
+
+    /* return view category */
     public function category() {
        return view('admin.category');
     }
 
+    /* return view login */
     public function login(){
         return view('admin.login');
     }
 
+
+    /* verify if user is logged in */
     public function customLogin(Request $request)
     {
         $request->validate([
@@ -38,13 +52,15 @@ class AdminController extends Controller
             return redirect()->intended('/admin/dashboard');
         }
   
-        return redirect("/admin/register");
+        return redirect("/admin/login");
     }
 
+    /* return view registration */
     public function register(){
         return view('admin.register');
     }
 
+    /* create a new user */
     public function create(array $data)
     {
       return User::create([
@@ -54,6 +70,7 @@ class AdminController extends Controller
       ]);
     }  
 
+    /* verify if user is already registered */
     public function customRegistration(Request $request)
     {  
         $request->validate([
@@ -68,14 +85,16 @@ class AdminController extends Controller
         return redirect("/admin/dashboard");
     }
 
+    /* check user authentication */
     public function checkAuth(){
         if(auth()->check()){
             return redirect("/admin/dashboard");
         }else{
-            return redirect("/admin/register");
+            return redirect("/admin/login");
         }
     }
 
+    /* add new category */
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'category' => "required",
@@ -97,6 +116,7 @@ class AdminController extends Controller
         }
     }
 
+    /* return list of all categories */
     public function fetchCategory(){
         $category = Catproduct::all();
         return response()->json([
@@ -104,12 +124,14 @@ class AdminController extends Controller
         ]);
     }
 
+    /* return list of categories using for select a product*/
     public function product(){
         $categories = Catproduct::all();
 
         return view('admin.product', ['categories' => $categories]);
     }
 
+    /* return list of products */
     public function fetchProduct(){
         $product = Product::join('catproducts', 'products.category_id', '=', 'catproducts.id')
                 ->select('nom','details','prix','image','category','products.id')
@@ -121,6 +143,7 @@ class AdminController extends Controller
         ]);
     }
 
+    /* if i clic in button edit category display data in form */
     public function edit($id)
     {
         $category = Catproduct::find($id);
@@ -140,6 +163,47 @@ class AdminController extends Controller
         }
 
     }
+
+    public function editProduct($id)
+    {
+        $products = Product::find($id);
+        $product = Product::join('catproducts', 'products.category_id', '=', 'catproducts.id')
+                            ->select('nom','details','prix','image','category','category_id')
+                            ->where('catproducts.id', $products->category_id)
+                            ->where('products.id', $id)
+                            ->get();
+
+        if($product)
+        {
+            return response()->json([
+                'status'=>200,
+                'product'=> $product,
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=>404,
+                'message'=>'No product Found.'
+            ]);
+        }
+
+    }
+
+    // public function updateProduct(Request $request){
+    //     $product_id = $request->product_id;
+    //     $product = Product::find($product_id);
+
+    //     $path = "files/";
+    //     $validator = \Validator::make($request->all(),[
+    //         'nom'=>'required',
+    //      ]);
+    //     if(!$validator->passes){
+    //         return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+    //     }else{
+
+    //     }
+    // }
 
     public function update(Request $request, $id)
     {
@@ -177,7 +241,7 @@ class AdminController extends Controller
         }
     }
 
-
+    /* delete a specefic category */
     public function destroy($id)
     {
         $category = Catproduct::find($id);
@@ -198,6 +262,7 @@ class AdminController extends Controller
         }
     }
 
+    /* delete a specific product */
     public function destroyProduct($id){
         $product = Product::find($id);
         if($product)
@@ -217,6 +282,8 @@ class AdminController extends Controller
         }
     }
 
+
+    /* Add new product and store image in public/storage/files */
     public function storeProduct(Request $request){
         $validator = \Validator::make($request->all(),[
             'nom'=>'required|string|unique:products',
@@ -227,8 +294,8 @@ class AdminController extends Controller
          ]);
 
          if(!$validator->passes()){
-             return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
-         }else{
+            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+        }else{
              $path = 'files/';
              $file = $request->file('image');
              $file_name = time().'_'.$file->getClientOriginalName();
@@ -247,5 +314,43 @@ class AdminController extends Controller
                  return response()->json(['code'=>1,'msg'=>'New product has been saved successfully']);
              }
          }
+    }
+
+    /* method created for display current auth user info in  */
+    public function profile(){
+        $email = Auth::user()->email;
+        $name = Auth::user()->name;
+        return view('admin.profile', ['email' => $email, 'name' => $name]);
+    }
+
+    public function modifyProfile(Request $request){
+        $id = Auth::user()->id;
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        $user->save();
+        return redirect()->route('admin.profile');
+    } 
+
+    public function changePass(Request $request){
+       
+        $request->validate([
+            'password' => 'current_password',
+            'newpass' => 'min:6|required_with:confirmpass|same:confirmpass',
+            'confirmpass' => 'min:6'
+        ],
+        [
+            'newpass.min' => 'The new passowrd must be at least 6 characters.',
+            'confirmpass.min' => 'The confirm pass must be at least 6 characters',
+        ]);
+
+        
+        $id = Auth::user()->id;
+        $user = User::find($id);
+        $user->password = Hash::make($request->newpass);
+
+        $user->save();
+        return redirect()->route('admin.profile');
     }
 }

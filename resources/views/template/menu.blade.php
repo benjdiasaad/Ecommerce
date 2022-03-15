@@ -25,7 +25,7 @@
 
         <div class="col-lg-6 menu-item filter-starters">
         @foreach($boissons as $boisson)
-            <img src="{{ $boisson->image }}" class="menu-img" alt="">
+            <img src="/storage/files/{{ $boisson->image }}" class="menu-img" alt="">
             <div class="menu-content">
                 <a href="#">{{$boisson->nom}}</a><span>${{$boisson->prix}}</span>
             </div>
@@ -42,7 +42,7 @@
 
         <div class="col-lg-6 menu-item filter-specialty">
             @foreach($pizzas as $pizza)
-                <img src="{{ $pizza->image }}" class="menu-img" alt="">
+                <img src="/storage/files/{{ $pizza->image }}" class="menu-img" alt="">
                 <div class="menu-content">
                     <a href="#">{{$pizza->nom}}</a><span>${{$pizza->prix}}</span>
                 </div>
@@ -59,7 +59,7 @@
 
         <div class="col-lg-6 menu-item filter-salads">
             @foreach($salades as $salade)  
-             <img src="{{ $salade->image }}" class="menu-img" alt="">
+             <img src="/storage/files/{{ $salade->image }}" class="menu-img" alt="">
              <div class="menu-content">
                <a href="#">{{$salade->nom}}</a><span>${{$salade->prix}}</span>
              </div>

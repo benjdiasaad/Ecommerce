@@ -49,6 +49,12 @@
 								class="align-middle">Product</span>
 						</a>
 					</li>
+					
+					<li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/message">
+                            <i class="align-middle" data-feather="message-square"></i> <span class="align-middle">Messages</span>
+                        </a>
+                    </li>
 
 				</ul>
 
@@ -102,12 +108,64 @@
 								  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 								  <button type="submit" class="btn btn-primary">Save Product</button>
 							  </form>
-							
+
 						</div>
-						
+
 					</div>
 				</div>
 			</div>
+
+			{{-- Edit Modal --}}
+			<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="editProductModalLabel">Modify Product</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+
+							<form action="{{ route('update.product')}}" method="post" enctype="multipart/form-data" id="form-2">
+								@csrf
+								 <input type="hidden" id="product_id" name="product_id" />
+
+								  <div class="form-group mb-3">
+									  <label for="">Product name</label>
+									  <input type="text" name="nom" class="nom form-control">
+									  <span class="text-danger error-text nom_error"></span>
+								  </div>
+								  <div class="form-group mb-3">
+									<label for="">Prix</label>
+									<input type="number" name="prix" class="prix form-control">
+									<span class="text-danger error-text prix_error"></span>
+								  </div>
+								  <div class="form-group mb-3">
+									<label for="">Details</label>
+									<textarea name="details" class="details form-control" rows="3" required></textarea>
+									<span class="text-danger error-text detail_error"></span>
+								 </div>
+								 <div class="form-group mb-3">
+									<label for="">Choose category</label>
+									<select id="emptyDropdown" class="form-control">
+									</select>
+								</div>
+								  <div class="form-group mb-3">
+									  <label for="">Product image <button id="clearInputFile" type="button" class="btn btn-danger btn-sm" style="right: 0px;"> Clear </button> </label>
+									  <input type="file" name="image" class="image form-control" data-value="">
+									  <span class="text-danger error-text image_error"></span>
+								  </div>
+								  <div class="img-holder-update"></div>
+								  <br>
+								  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								  <button type="submit" class="btn btn-primary">Modify Product</button>
+							  </form>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+			{{-- Edn- Edit Modal --}}
 
 			{{-- Delete Modal --}}
 			<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -204,7 +262,7 @@
                             <td>' + item.nom + '</td>\
                             <td>' + item.prix + '</td>\
                             <td>' + item.category + '</td>\
-                            <td> <img class="d-flex align-self-start rounded mr-3" height="64" src=/storage/files/'+ item.image + '> </img></td>\
+                            <td> <img class="rounded-circle" width="80" height="100" src=/storage/files/'+ item.image + '> </img></td>\
                             <td><button type="button" value="' + item.id + '" class="btn btn-primary editbtn btn-sm">Edit</button></td>\
                             <td><button type="button" value="' + item.id + '" class="btn btn-danger deletebtn btn-sm">Delete</button></td>\
                         \</tr>');
@@ -212,7 +270,7 @@
                 }
             });
            }
-			
+
 		   $('#form').on('submit', function(e){
                 e.preventDefault();
 
@@ -277,7 +335,6 @@
 
 			$(document).on('click', '.deletebtn', function () {
 				var categorie_id = $(this).val();
-				console.log(categorie_id);
 				$('#DeleteModal').modal('show');
 				$('#deleteing_id').val(categorie_id);
             });
@@ -299,7 +356,6 @@
                 url: "/admin/delete-product/" + id,
                 dataType: "json",
                 success: function (response) {
-                    // console.log(response);
                     if (response.status == 404) {
                         $('#success_message').addClass('alert alert-danger');
                         $('#success_message').text(response.message);
@@ -315,6 +371,60 @@
                 }
             });
         });
+
+		$(document).on('click', '.editbtn', function(e) {
+				var product_id = $(this).val();
+				$('#editProductModal').modal('show');
+				$.ajax({
+                type: "GET",
+                url: "/admin/edit-product/" + product_id,
+                success: function (response) {
+                    if (response.status == 404) {
+						$('#success_message').html("");
+                        $('#success_message').addClass('alert alert-danger');
+                        $('#success_message').text(response.message);
+                        $('#editProductModal').modal('hide');
+                    } else {
+                        $('.nom').val(response.product[0].nom);
+                        $('.prix').val(response.product[0].prix);
+                        $('.details').val(response.product[0].details);
+						$('#emptyDropdown').append('<option value="' + response.product[0].categorie_id + '">' + response.product[0].category + '</option>');
+						$('#editProductModal').find('#form-2').find('.img-holder-update').html('<img class="d-flex align-self-start rounded mr-3" height="64" src="/storage/files/'+response.product[0].image+'" >');
+						$('#editProductModal').find('#form-2').find('input[type="file"]').attr('data-value','<img class="d-flex align-self-start rounded mr-3" height="64" src="/storage/files/'+response.product[0].image+'" >');
+						// $('#editProductModal').find('#form-2').find('input[type="file"]').val('saad.jpg');
+						// $('.image').val(response.product[0].image);
+                    }
+                }
+            });
+		});
+
+		$('input[type="file"][name="image"]').on('change', function(){
+			var img_path = $(this)[0].value;
+			var img_holder = $('.img-holder-update');
+			var currentImagePath = $(this).data('value');
+			var extension = img_path.substring(img_path.lastIndexOf('.')+1).toLowerCase();
+			if(extension == 'jpg' || extension == 'jpeg' || extension == 'png'){
+				if(typeof(FileReader) != 'undefined'){
+					img_holder.empty();
+					var reader = new FileReader();
+					reader.onload = function(e){
+                        $('<img/>',{'src':e.target.result,'class':'img-fluid','style':'max-width:100px;margin-bottom:10px;'}).appendTo(img_holder);
+                    }
+                    img_holder.show();
+                    reader.readAsDataURL($(this)[0].files[0]);
+				}else{
+					$(img_holder).html('This browser does not support FileReader');
+				}
+			}else{
+                    $(img_holder).html(currentImagePath);
+            } 
+		});
+
+		$(document).on('click','#clearInputFile', function(){
+			var form = $(this).closest('form');
+			$(form).find('input[type="file"]').val('');
+			$(form).find('.img-holder-update').html($(form).find('input[type="file"]').data('value'));
+		});
 
 	});
 	</script>

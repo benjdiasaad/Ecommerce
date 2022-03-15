@@ -60,14 +60,21 @@ Route::prefix('admin')->controller(AdminController::class)->group(function(){
     Route::post('custom-registration', 'customRegistration')->name('register.custom');
     Route::get('/dashboard', 'index')->name('admin.dashboard');
     Route::get('/category', 'category')->name('admin.category');
+    Route::get('/message', 'message');
     Route::post('/categories', 'store'); 
     Route::get('/edit-category/{id}', 'edit');
+    Route::get('/edit-product/{id}', 'editProduct');
     Route::put('/update-category/{id}','update');
     Route::get('/fetch-categories','fetchCategory');
     route::delete('/delete-category/{id}', 'destroy');
     Route::get('/product', 'product')->name('admin.product');  
     Route::post('/products', 'storeProduct')->name('admin.store');  
     Route::get('/fetch-products', 'fetchProduct');
+    Route::post('/updateProduct', 'updateProduct')->name('update.product');
     route::delete('/delete-product/{id}', 'destroyProduct');
+    route::get('/profile', 'profile')->name('admin.profile');
+    route::put('/profile', 'modifyProfile')->name('admin.modifyprofile');
+    Route::put('/changepass', 'changePass')->name('admin.changepass');
+
 });
 

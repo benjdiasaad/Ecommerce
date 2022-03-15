@@ -13,7 +13,8 @@ class Product extends Model
    
     protected $guarded = ['id'];
 
-    public function getPrix(){
+    public function getPrix()
+    {
         return number_format($this->prix, 2, ',', ' ').' DH';
     }
     public function category()

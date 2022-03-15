@@ -7,10 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
     <meta name="author" content="AdminKit">
-    <meta name="keywords"
-        content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="shortcut icon" href="{{ asset('static/img/icons/icon-48x48.png') }}" />
 
     <link rel="canonical" href="https://demo-basic.adminkit.io/" />
@@ -49,6 +46,11 @@
                             <i class="align-middle" data-feather="shopping-bag"></i> <span class="align-middle">Product</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/message">
+                            <i class="align-middle" data-feather="message-square"></i> <span class="align-middle">Messages</span>
+                        </a>
+                    </li>
 
                 </ul>
 
@@ -73,7 +75,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                        <h5 class="card-title">Sales</h5>
+                                                        <h5 class="card-title">Product</h5>
                                                     </div>
 
                                                     <div class="col-auto">
@@ -82,7 +84,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="mt-1 mb-3">2.382</h1>
+                                                <h1 class="mt-1 mb-3">{{$product}}</h1>
                                                 <div class="mb-0">
                                                     <span class="text-danger"> <i
                                                             class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
@@ -94,7 +96,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                        <h5 class="card-title">Visitors</h5>
+                                                        <h5 class="card-title">Users</h5>
                                                     </div>
 
                                                     <div class="col-auto">
@@ -103,7 +105,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="mt-1 mb-3">14.212</h1>
+                                                <h1 class="mt-1 mb-3">{{$user}}</h1>
                                                 <div class="mb-0">
                                                     <span class="text-success"> <i
                                                             class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
@@ -117,7 +119,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                        <h5 class="card-title">Earnings</h5>
+                                                        <h5 class="card-title">Categories</h5>
                                                     </div>
 
                                                     <div class="col-auto">
@@ -126,31 +128,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="mt-1 mb-3">$21.300</h1>
+                                                <h1 class="mt-1 mb-3">{{$category}}</h1>
                                                 <div class="mb-0">
                                                     <span class="text-success"> <i
                                                             class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>
-                                                    <span class="text-muted">Since last week</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col mt-0">
-                                                        <h5 class="card-title">Orders</h5>
-                                                    </div>
-
-                                                    <div class="col-auto">
-                                                        <div class="stat text-primary">
-                                                            <i class="align-middle" data-feather="shopping-cart"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <h1 class="mt-1 mb-3">64</h1>
-                                                <div class="mb-0">
-                                                    <span class="text-danger"> <i
-                                                            class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>
                                                     <span class="text-muted">Since last week</span>
                                                 </div>
                                             </div>
