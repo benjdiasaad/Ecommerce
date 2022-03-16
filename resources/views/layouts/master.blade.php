@@ -2,24 +2,28 @@
 <html lang="en">
 
 <head>
+  
+  <!-- Favicons -->
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title> Restaurantly BENJDIA Saad </title>
+  <title>Restaurantly Benjdia - SAAD</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   @yield('extra-meta')
   @yield('extra-script')
-  <!-- Favicons -->
-  <link href="{{ asset('assets/img/Saad.ico') }}" rel="icon">
-  <link href="{{ asset('assets/img/Saad.jpg') }}" rel="Saad.jpg">
 
+  <!-- Favicons -->
+  <link href="{{ asset('assets/img/restau.ico') }}" rel="icon">
+  <link href="{{ asset('assets/img/restau.jpg') }}" rel="restau.jpg">
+
+  {{-- font-awesome CDN --}}
+  <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />  <!-- Vendor CSS Files -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
- 
+
+  <!-- Vendor CSS Files -->
   <link href="{{ asset('assets/vendor/animate.css/animate.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -40,9 +44,9 @@
 
 <body>
 
- @include('partials.navbar')
 
   <main id="main">
+    @include('partials.navbar')
 
     @yield('content')
 

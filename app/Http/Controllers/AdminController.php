@@ -18,7 +18,8 @@ class AdminController extends Controller
         $product = Product::count();
         $category = Catproduct::count();
         $user = User::count();
-        return view('admin.dashboard',['product' => $product, 'category'=>$category,'user'=>$user]);
+        $message = Contact::count();
+        return view('admin.dashboard',['product' => $product, 'category'=>$category,'user'=>$user,'message'=>$message]);
     }
 
     public function message(){
@@ -238,6 +239,24 @@ class AdminController extends Controller
                 ]);
             }
 
+        }
+    }
+
+    public function getMessage($id){
+        $message = Contact::find($id);
+        if($message)
+        {
+            return response()->json([
+                'status'=>200,
+                'message'=> $message,
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status'=>404,
+                'message'=>'No message Found.'
+            ]);
         }
     }
 

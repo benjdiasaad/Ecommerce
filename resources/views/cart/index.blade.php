@@ -10,12 +10,13 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="{{ asset('assets/img/Saad.ico') }}" rel="icon">
-  <link href="{{ asset('assets/img/Saad.jpg') }}" rel="Saad.jpg">
+  <link href="{{ asset('assets/img/restau.ico') }}" rel="icon">
+  <link href="{{ asset('assets/img/restau.jpg') }}" rel="restau.jpg">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
+{{-- font-awesome CDN --}}
+<link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- Vendor CSS Files -->
   <link href="{{ asset('assets/vendor/animate.css/animate.min.css') }}" rel="stylesheet">
@@ -65,7 +66,7 @@
                             <tr>
                                 <th scope="row" class="border-0">
                                     <div class="p-2">
-                                        <img src="{{ $product->model->image }}" alt="" width="70" class="img-fluid rounded shadow-sm">
+                                        <img src="/storage/files/{{ $product->model->image }}" style="width:50px;height:65px;" class="rounded-circle">
                                         <div class="ml-3 d-inline-block align-middle">
                                             <h5 class="mb-0"> <a href="{{ route('template.show', ['nom' => $product->model->nom]) }}" class="text-dark d-inline-block align-middle">{{ $product->model->nom }}</a></h5><span class="text-muted font-weight-normal font-italic d-block">{{ $product->model->details }}</span>
                                         </div>

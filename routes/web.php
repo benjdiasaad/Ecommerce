@@ -6,7 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
- 
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +25,8 @@ Route::get('/', function () {
 
 Route::get('/about', function () {
     return view('template.about');
-});
+})->name('template.about');
+
 
 // Products Route 
 Route::controller(ProductController::class)->group(function(){
@@ -52,8 +53,14 @@ Route::get('/contact', function () {
 Route::get('/logout', [LogoutController::class, 'perform'])->name('logout.perform');
 
 
+Route::controller(ContactController::class)->group(function(){
+    route::post('/addmsg', 'addMsg')->name('message.add');
+    route::get('/delete-msg/{id}', 'destroyMsg')->name('message.delete');
+});
+
 Route::prefix('admin')->controller(AdminController::class)->group(function(){
     Route::get('/', 'checkAuth');
+    Route::get('/get-messages/{id}','getMessage');
     Route::get('/login', 'login')->name('admin.login');
     Route::post('custom-login','customLogin')->name('login.custom');
     Route::get('/register', 'register')->name('admin.register');

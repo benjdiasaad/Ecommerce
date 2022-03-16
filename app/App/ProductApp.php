@@ -59,7 +59,6 @@ class ProductApp {
         } catch (\Throwable $th) {
             Log::error($th->getMessage(), $th->getLine(), $th->getFile());
             $result = ['response' => 'erreur: unknown error occured !'];
-            dd($result);
         }
         return $result;
 

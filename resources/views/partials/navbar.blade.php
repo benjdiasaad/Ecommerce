@@ -15,12 +15,12 @@
       <h1 class="logo me-auto me-lg-0"><a href="/">Restaurantly</a></h1>
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto" href="/">Home</a></li>
-          <li><a class="nav-link scrollto" href="/about">About</a></li>
-          <li><a class="nav-link scrollto" href="/menu">Menu</a></li>
-          <li><a class="nav-link scrollto" href="/special">Specials</a></li>
-          <li><a class="nav-link scrollto" href="/contact">Contact</a></li>
-          <li><a class="nav-link scrollto" href="{{ route('cart.index') }}">panier <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> {{ Cart::count() }} </span> </a></li>
+          <li><a class="nav-link scrollto {{ Request::is('/') ? 'active' : '' }}" href="/">Home</a></li>
+          <li><a href="/about" class="nav-link scrollto {{ Request::is('about') ? 'active' : '' }}">About</a></li>
+          <li><a href="/menu" class="nav-link scrollto {{ Request::is('menu') ? 'active' : '' }}">Menu</a></li>
+          <li><a class="nav-link scrollto {{ Request::is('special') ? 'active' : '' }}" href="/special">Specials</a></li>
+          <li><a class="nav-link scrollto {{ Request::is('contact') ? 'active' : '' }}" href="/contact">Contact</a></li>
+          <li><a class="nav-link scrollto {{ Request::is('panier') ? 'active' : '' }}" href="{{ route('cart.index') }}"><i class="las la-shopping-cart" style="font-size: 25px;"></i> <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> {{ Cart::count() }} </span> </a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>

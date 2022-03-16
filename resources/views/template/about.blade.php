@@ -3,7 +3,7 @@
 @section('content')
     
     <section id="about" class="about">
-        <div class="container" data-aos="fade-up" style="margin-top:3%;">
+        <div class="container" data-aos="fade-up" style="margin-top:5%;">
   
           <div class="row">
             <div class="col-lg-6 order-1 order-lg-2" data-aos="zoom-in" data-aos-delay="100">
